@@ -20,7 +20,13 @@ CREATE TABLE login_attempts (
     ip VARCHAR(45) NOT NULL,
     user_agent TEXT,
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    resultado ENUM('success', 'fail') NOT NULL,
+    resultado ENUM(
+        'success',
+        'fail',
+        'blocked',
+        'blacklisted',
+        'temporarily_blocked'
+    ) NOT NULL,
     razon_fallo VARCHAR(255) NULL
 ) ENGINE = InnoDB;
 

@@ -4,7 +4,7 @@ use App\Services\login\UserRepository;
 use App\Services\login\LoginAttemptRepository;
 use App\Services\login\SessionRepository;
 use App\Services\login\SessionRepositoryLogout;
-use App\core\IpResolver;
+use App\services\ip\IpResolver;
 use App\core\TokenService;
 use App\core\ResponsServer;
 class AuthService
@@ -39,16 +39,16 @@ class AuthService
         $logValidaUser = $this->users->findByEmail($user);
         $ip = $this->ipResolve->get_client_ip();
         if (!$logValidaUser) {
-            $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'No existe usuario');
-            $this->rs->error("Usuario y/o contraseña incorrecto 1", -11, 200);
+            $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
+            $this->rs->error("Usuario y/o contraseña incorrecto", -11, 200);
         }
         $hashBD = $logValidaUser['password_hash'];
         // 2. Validar contraseña
 
 
         if (!password_verify($pass, $hashBD)) {
-            $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Contraseña Incorecta');
-            $this->rs->error("Usuario y/o contraseña incorrecto 2", -11, 200);
+            $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
+            $this->rs->error("Usuario y/o contraseña incorrecto", -11, 200);
         }
         $this->logs->registrarIntento($user, $ip, $ua, 'success', '');
         $this->createSession($logValidaUser['id'], $ip, $ua);

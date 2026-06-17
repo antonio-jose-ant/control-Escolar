@@ -21,4 +21,6 @@ class LoginAttemptRepository
             (:user, :ip, :ua, :res, :rf)";
         return $this->pdo->prepare($sql)->execute($params);
     }
+
+    
 }

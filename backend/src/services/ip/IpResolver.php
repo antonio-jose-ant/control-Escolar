@@ -1,5 +1,5 @@
 <?php
-namespace App\core;
+namespace App\services\ip;
 class IpResolver
 {
     private array $info;
