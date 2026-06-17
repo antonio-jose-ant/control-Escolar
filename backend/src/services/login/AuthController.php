@@ -3,19 +3,15 @@ namespace App\services\login;
 class AuthController
 {
     private $Services;
-    private $usuario;
-    private $contraseña;
-    public function __construct($user, $pass, private \PDO $con)
+    public function __construct(private AuthService $AuthService)
     {
-        $this->usuario = $user;
-        $this->contraseña = $pass;
-        $this->Services = new \App\services\AuthService\AuthService($con);
+        $this->Services = $AuthService;
     }
-    public function login()
+    public function login(string $usuario, string $contraseña)
     {
         $this->Services->auth(
-            $this->usuario,
-            $this->contraseña,
+            $usuario,
+            $contraseña,
             $_SERVER['HTTP_USER_AGENT']
         );
     }
@@ -28,32 +24,5 @@ class AuthController
             return true;
         }
         return $this->Services->exit($token);
-    }
-    public function Authorized(): bool
-    {
-        $uid = $_COOKIE['uid'] ?? null;
-        $token = $_COOKIE['session_token'] ?? null;
-
-        if (!$uid || !$token) {
-            $this->logout();
-            // header("Location: /php-crs/frontend/app/");
-            return false; // detener ejecución
-        }
-
-        if (!$this->Services->isItAuthorized((int) $uid, $token)) {
-            $this->logout();
-            // header("Location: /php-crs/frontend/app/");
-            return false; // detener ejecución
-        }
-
-        return true;
-    }
-    public function register()
-    {
-
-        $this->Services->addUser(
-            $this->usuario,
-            $this->contraseña
-        );
     }
 }
