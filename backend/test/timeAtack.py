@@ -1,6 +1,6 @@
 import time, requests, statistics
 
-URL = "http://localhost/LOGIN-PHP/backend/public/index.php/login"
+URL = "http://localhost/control-escolar/backend/public/index.php/login"
 tests = ["Sege", "Sege2060", "Sege20602", "sege206020", "Sege20602"]
 results = {}
 
