@@ -1,5 +1,6 @@
 <?php
-namespace App\Repositories;
+namespace App\services\login;
+
 class SessionRepositoryLogout
 {
     public function __construct(private \PDO $pdo)

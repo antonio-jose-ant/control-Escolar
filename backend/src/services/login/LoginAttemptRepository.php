@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\services\login;
 class LoginAttemptRepository
 {
     public function __construct(private \PDO $pdo)

@@ -1,13 +1,12 @@
 <?php
 namespace App\Services\login;
-use App\Repositories\UserRepository;
-use App\Repositories\LoginAttemptRepository;
-use App\Repositories\SessionRepository;
-use App\Repositories\SessionRepositoryLogout;
-use App\Services\AuthService\IpResolver;
-use App\Services\AuthService\PasswordValidator;
+use App\Services\login\UserRepository;
+use App\Services\login\LoginAttemptRepository;
+use App\Services\login\SessionRepository;
+use App\Services\login\SessionRepositoryLogout;
+use App\core\IpResolver;
 use App\Services\AuthService\TokenService;
-use App\Services\AuthService\ResponsServer;
+use App\core\ResponsServer;
 class AuthService
 {
     private $users;
@@ -23,7 +22,6 @@ class AuthService
         $this->users = new UserRepository($conexion);
         $this->sessions = new SessionRepository($conexion);
         $this->logs = new LoginAttemptRepository($conexion);
-        $this->validator = new PasswordValidator();
         $this->tokens = new TokenService();
         $this->ipResolve = new IpResolver();
         $this->rs = new ResponsServer();
@@ -90,7 +88,7 @@ class AuthService
         return true;
 
     }
-    private function createSession($id, $ip, $ua, )
+    private function createSession($id, $ip, $ua)
     {
         session_start();
         $hashes = $this->tokens->createToken();

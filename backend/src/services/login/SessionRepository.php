@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\services\login;
 /**
  * Summary of SessionRepository
  *  crea el registro de un iniiicio de secion 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Router;
+namespace App\core;
 
 class Router
 {
@@ -10,7 +10,7 @@ class Router
     {
         self::$routes[] = [
             'method' => strtoupper($method),
-            'path'   => $path,
+            'path' => $path,
             'action' => $action
         ];
     }
@@ -35,10 +35,11 @@ class Router
         self::add('DELETE', $path, $action);
     }
 
-    public static function dispatch($prs)
+    public static function dispatch(string $prs)
     {
+
         $requestUri = parse_url($prs, PHP_URL_PATH);
-        $method      = $_SERVER['REQUEST_METHOD'];
+        $method = $_SERVER['REQUEST_METHOD'];
 
         foreach (self::$routes as $route) {
             // Convertir rutas dinámicas "/users/{id}" a regex
@@ -52,7 +53,7 @@ class Router
         }
 
         http_response_code(404);
-        echo json_encode(["error" => "Ruta no encontrada","data"=>[$requestUri,$method ]]);
+        echo json_encode(["error" => "Ruta no encontrada", "data" => [$requestUri, $method]]);
         exit;
     }
 }

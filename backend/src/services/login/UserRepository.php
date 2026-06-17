@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\services\login;
 
 class UserRepository
 {

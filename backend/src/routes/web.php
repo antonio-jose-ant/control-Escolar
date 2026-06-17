@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/displayErrors.php';
-use App\Router\Router;
+use App\core\Router;
 use App\factory\AuthFactory;
 Router::post('/login', function () {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -10,5 +10,5 @@ Router::post('/login', function () {
     );
 });
 Router::post('/logout', function () {
-    echo json_encode(["logout" => true]);
+    (new AuthFactory())::logout();
 });
