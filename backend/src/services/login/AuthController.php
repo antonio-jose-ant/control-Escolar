@@ -1,6 +1,6 @@
 <?php
-namespace App\services;
-class LoginService
+namespace App\services\login;
+class AuthController
 {
     private $Services;
     private $usuario;
