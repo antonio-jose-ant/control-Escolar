@@ -5,7 +5,7 @@ use App\Services\login\LoginAttemptRepository;
 use App\Services\login\SessionRepository;
 use App\Services\login\SessionRepositoryLogout;
 use App\core\IpResolver;
-use App\Services\AuthService\TokenService;
+use App\core\TokenService;
 use App\core\ResponsServer;
 class AuthService
 {
@@ -37,7 +37,7 @@ class AuthService
 
         }
         $logValidaUser = $this->users->findByEmail($user);
-        $ip = $this->ipResolve->obtenerIP();
+        $ip = $this->ipResolve->get_client_ip();
         if (!$logValidaUser) {
             $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'No existe usuario');
             $this->rs->error("Usuario y/o contraseña incorrecto 1", -11, 200);
