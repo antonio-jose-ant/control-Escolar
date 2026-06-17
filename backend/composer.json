@@ -5,6 +5,6 @@
         }
     },
     "require": {
-        "geoip2/geoip2": "*"
+        "geoip2/geoip2": "^3.3"
     }
 }
