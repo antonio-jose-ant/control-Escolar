@@ -12,5 +12,14 @@ class ip_blacklist extends SqlComands
     {
         $this->info = new Debuger();
     }
-
+    public function Agregar(string $ip, string $reason)
+    {
+        $sql = SqlComands::insert($this->nameTable, ['ip', 'motivo']);
+        $this->info->setInfo('insert:SQL', $sql);
+        $params = [
+            'ip' => $ip,
+            'motivo' => $reason
+        ];
+        return $this->pdo->prepare($sql)->execute($params);
+    }
 }

@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\helpers\Router;
+use App\Config\ZonaHoraria;
+ZonaHoraria::configurar('America/Mexico_City');
 require_once __DIR__ . '/../src/routes/web.php';
 $uri = str_replace('/control-escolar/backend/public/index.php', '', $_SERVER['REQUEST_URI']);
 

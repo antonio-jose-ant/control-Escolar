@@ -24,14 +24,12 @@ class IPServices
             return true;
         }
         if ($this->blocked->existeIp($ip)) {
-
             return true;
         }
         if ($this->tempBlocked->existeIp($ip, $usuario)) {
-
             return true;
         }
-        $this->setInfoDebug('backList:existeIp', $this->backList->getInfoDebug());
+        $this->setInfoDebug('backList:existeIp', $this->backList->info->getInfo());
         $this->setInfoDebug('blocked:existeIp', $this->blocked->info->getInfo());
         $this->setInfoDebug('tempBlocked:existeIp', $this->tempBlocked->info->getInfo());
         return false;
