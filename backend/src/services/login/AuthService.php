@@ -7,13 +7,14 @@ use App\Services\login\SessionRepositoryLogout;
 use App\services\ip\IpResolver;
 use App\Services\login\TokenService;
 use App\helpers\ResponsServer;
+use App\factory\ipFactory;
 class AuthService
 {
     private $users;
     private $rs;
     private $sessions;
     private $logs;
-    private $validator;
+    private $ipFactory;
     private $tokens;
     private $ipResolve;
     private $justLogaut;
@@ -26,6 +27,7 @@ class AuthService
         $this->ipResolve = new IpResolver();
         $this->rs = new ResponsServer();
         $this->justLogaut = new SessionRepositoryLogout($conexion);
+        $this->ipFactory = new IpFactory();
     }
     public function auth(string $user, string $pass, string $ua)
     {
@@ -38,6 +40,14 @@ class AuthService
         }
         $logValidaUser = $this->users->findByEmail($user);
         $ip = $this->ipResolve->get_client_ip();
+        if ($this->ipFactory->ipBloqued($user, $ip)) {
+            $this->logs->registrarIntento($user, $ip, $ua, 'blocked', 'ip bloqueada por intentos fallidos');
+            $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s')]);
+        }
+        if ($this->ipFactory->blockFailedAttempts($user, $ip)) {
+            $this->logs->registrarIntento($user, $ip, $ua, 'temporarily_blocked', 'mas de 5 intentos fallidos en los ultimos 5 minutos');
+            $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s')]);
+        }
         if (!$logValidaUser) {
             $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
             $this->rs->error("Usuario y/o contraseña incorrecto", -11, 200);

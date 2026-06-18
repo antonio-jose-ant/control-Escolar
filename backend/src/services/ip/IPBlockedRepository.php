@@ -4,6 +4,7 @@ use App\mapping\SqlComands;
 use AppendIterator;
 class IPBlockedRepository extends \App\mapping\IP_BLOCKED
 {
+    
     public function __construct(private \PDO $pdo)
     {
     }

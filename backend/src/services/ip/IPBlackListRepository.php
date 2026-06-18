@@ -24,5 +24,7 @@ class IPBlackListRepository extends \App\mapping\ip_blacklist
         $stmt->execute(['ip' => $ip]);
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $row['exist'];
+
     }
+
 }
