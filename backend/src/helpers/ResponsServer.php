@@ -1,5 +1,5 @@
 <?php
-namespace App\core;
+namespace App\helpers;
 
 class ResponsServer
 {

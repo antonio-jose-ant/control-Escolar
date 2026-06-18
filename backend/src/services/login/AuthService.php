@@ -5,8 +5,8 @@ use App\Services\login\LoginAttemptRepository;
 use App\Services\login\SessionRepository;
 use App\Services\login\SessionRepositoryLogout;
 use App\services\ip\IpResolver;
-use App\core\TokenService;
-use App\core\ResponsServer;
+use App\Services\login\TokenService;
+use App\helpers\ResponsServer;
 class AuthService
 {
     private $users;

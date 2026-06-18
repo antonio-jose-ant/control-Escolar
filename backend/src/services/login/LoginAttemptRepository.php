@@ -1,26 +1,36 @@
 <?php
 namespace App\services\login;
-class LoginAttemptRepository
+use App\mapping\login_attempts;
+use App\mapping\SqlComands;
+class LoginAttemptRepository extends login_attempts
 {
     public function __construct(private \PDO $pdo)
     {
     }
-    public function registrarIntento($usuario, $ip, $ua, $res, $razon)
+    public function registrarIntento(string $usuario, string $ip, string $ua, string $res, string $razon)
     {
+
         $params = [
-            'user' => $usuario,
+            'usuario' => $usuario,
             'ip' => $ip,
-            'ua' => $ua,
-            'res' => $res,
-            'rf' => $razon
+            'user_agent' => $ua,
+            'resultado' => $res,
+            'razon_fallo' => $razon
         ];
-        $sql = "
-        INSERT INTO login_attempts 
-            (usuario, ip, user_agent, resultado, razon_fallo)
-        VALUES 
-            (:user, :ip, :ua, :res, :rf)";
+        $sql = SqlComands::insert($this->nameTable, ['usuario', 'ip', 'user_agent', 'resultado', 'razon_fallo']);
         return $this->pdo->prepare($sql)->execute($params);
     }
+    public function IntentosFallidos(string $ip)
+    {
+        $sql = "SELECT count(*)
+            FROM {$this->nameTable}
+            WHERE ip=:ip
+                AND resultado = 'fail'
+                AND fecha >= NOW() - INTERVAL 10 MINUTE
+                AND DATE(fecha) = CURDATE();
+        ";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['ip' => $ip]);
+    }
 
-    
 }
