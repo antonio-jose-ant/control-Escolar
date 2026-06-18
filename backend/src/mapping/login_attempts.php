@@ -1,20 +1,17 @@
 <?php
 namespace App\mapping;
-
-use DateTime;
-
-class login_attempts
+use App\Config\Debuger;
+use App\mapping\SqlComands;
+class login_attempts extends SqlComands
 {
     public $nameTable = 'login_attempts';
     public $As = 'intento';
-    public int $id;
-    public string $usuario;
-    public string $ip;
-    public string $user_agent;
-    public DateTime $fecha;
-    public string $resultado;
-    public string $razon_fallo;
+    public $info;
 
+    public function __construct(private \PDO $pdo)
+    {
+        $this->info = new Debuger();
+    }
 
     /**
      * Summary of getColumns

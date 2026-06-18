@@ -2,35 +2,13 @@
 namespace App\Config;
 class Debuger
 {
-    private array $info;
-    private string $accesModule;
-    public function __construct(string $module)
+    private $Debuger;
+    public function getInfo()
     {
-        $this->mapingModules();
-        $this->accesModule = $module;
+        return $this->Debuger;
     }
-    public function setInfoDebug(string $proces, string $data)
+    public function setInfo($proces, $info)
     {
-        $this->info[$this->accesModule] = [$proces => $data];
-    }
-    public function getDataProces(string $proces): array
-    {
-        return $this->info[$this->accesModule][$proces];
-    }
-    public function getDataAllmodule(): array
-    {
-        return $this->info[$this->accesModule];
-    }
-    public function getDataAll(): array
-    {
-        return $this->info;
-    }
-    private function mapingModules()
-    {
-        $this->info = [
-            'IP' => true,
-            'LOGIN' => true
-        ];
-
+        $this->Debuger[$proces] = $info;
     }
 }

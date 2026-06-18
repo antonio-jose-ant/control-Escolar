@@ -8,6 +8,7 @@ use App\services\ip\IpResolver;
 use App\Services\login\TokenService;
 use App\helpers\ResponsServer;
 use App\factory\ipFactory;
+use App\Config\Debuger;
 class AuthService
 {
     private $users;
@@ -18,8 +19,10 @@ class AuthService
     private $tokens;
     private $ipResolve;
     private $justLogaut;
+
     public function __construct(private \PDO $conexion)
     {
+        // $this->Debuger = new Debuger('LOGIN');
         $this->users = new UserRepository($conexion);
         $this->sessions = new SessionRepository($conexion);
         $this->logs = new LoginAttemptRepository($conexion);
@@ -42,11 +45,11 @@ class AuthService
         $ip = $this->ipResolve->get_client_ip();
         if ($this->ipFactory->ipBloqued($user, $ip)) {
             $this->logs->registrarIntento($user, $ip, $ua, 'blocked', 'ip bloqueada por intentos fallidos');
-            $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s')]);
+            $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s'), $this->ipFactory->getInfoDebug()]);
         }
         if ($this->ipFactory->blockFailedAttempts($user, $ip)) {
             $this->logs->registrarIntento($user, $ip, $ua, 'temporarily_blocked', 'mas de 5 intentos fallidos en los ultimos 5 minutos');
-            $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s')]);
+            $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s'), $this->ipFactory->getInfoDebug()]);
         }
         if (!$logValidaUser) {
             $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
@@ -54,8 +57,6 @@ class AuthService
         }
         $hashBD = $logValidaUser['password_hash'];
         // 2. Validar contraseña
-
-
         if (!password_verify($pass, $hashBD)) {
             $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
             $this->rs->error("Usuario y/o contraseña incorrecto", -11, 200);

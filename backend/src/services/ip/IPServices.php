@@ -10,6 +10,7 @@ class IPServices
     private $tempBlocked;
     private $backList;
     private $LoginAttemp;
+    private $Debuger;
     public function __construct(private \PDO $conexion)
     {
         $this->blocked = new IPBlockedRepository($conexion);
@@ -23,24 +24,42 @@ class IPServices
             return true;
         }
         if ($this->blocked->existeIp($ip)) {
+
             return true;
         }
         if ($this->tempBlocked->existeIp($ip, $usuario)) {
+
             return true;
         }
+        $this->setInfoDebug('backList:existeIp', $this->backList->getInfoDebug());
+        $this->setInfoDebug('blocked:existeIp', $this->blocked->info->getInfo());
+        $this->setInfoDebug('tempBlocked:existeIp', $this->tempBlocked->info->getInfo());
         return false;
     }
     public function countAuthFailed(string $usuario, string $ip)
     {
-        if ($this->LoginAttemp->IntentosFallidos($ip, $usuario, 5) == 5) {
-            $this->tempBlocked->insert($ip, $usuario);
+        $rs = $this->LoginAttemp->IntentosFallidos($ip, $usuario, 5);
+        $this->setInfoDebug('countAuthFailed:5', $rs);
+        if ($rs == 5) {
+            $this->tempBlocked->Agregar($ip, $usuario);
+            $this->setInfoDebug('tempBlocked:insert', $this->LoginAttemp->getInfoDebug());
             return true;
         }
-        if ($this->LoginAttemp->IntentosFallidos($ip, $usuario, 15)) {
-            $this->blocked->insert($ip, "exeso de Intentos fallidos");
+        if ($rs >= 15) {
+            $this->blocked->Agregar($ip, "exeso de Intentos fallidos");
+            $this->setInfoDebug('blocked:insert', $this->LoginAttemp->getInfoDebug());
             return true;
         }
+        $this->setInfoDebug('sin bloqueo:insert', $this->LoginAttemp->getInfoDebug());
+
         return false;
     }
-
+    public function getInfoDebug()
+    {
+        return $this->Debuger;
+    }
+    private function setInfoDebug($proces, $info)
+    {
+        $this->Debuger[$proces] = $info;
+    }
 }

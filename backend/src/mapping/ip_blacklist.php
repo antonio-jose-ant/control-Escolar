@@ -1,12 +1,16 @@
 <?php
 namespace App\mapping;
-class ip_blacklist
+use App\Config\Debuger;
+use App\mapping\SqlComands;
+class ip_blacklist extends SqlComands
 {
     public $nameTable = 'ip_blacklist';
     public $As = 'blacklist';
-    public int $id;
-    public string $ip;
-    public string $motivo;
-    public string $fecha;
+    public $info;
+
+    public function __construct(private \PDO $pdo)
+    {
+        $this->info = new Debuger();
+    }
 
 }
