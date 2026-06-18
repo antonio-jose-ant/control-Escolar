@@ -21,7 +21,7 @@ class IPBlockedRepository extends \App\mapping\IP_BLOCKED
 
     public function existeIp(string $ip)
     {
-        $sql = SqlComands::select($this->nameTable, ['count(*) as exist'], ["ip=:ip"]);
+        $sql = SqlComands::select($this->nameTable, ['count(*) as exist'], ["ip=:ip", "fecha_fin >= NOW()"]);
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['ip' => $ip]);
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);

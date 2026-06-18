@@ -20,17 +20,15 @@ class LoginAttemptRepository extends login_attempts
         $sql = SqlComands::insert($this->nameTable, ['usuario', 'ip', 'user_agent', 'resultado', 'razon_fallo']);
         return $this->pdo->prepare($sql)->execute($params);
     }
-    public function IntentosFallidos(string $ip)
+    public function IntentosFallidos(string $ip, string $usuario, int $time)
     {
-        $sql = "SELECT count(*)
-            FROM {$this->nameTable}
-            WHERE ip=:ip
-                AND resultado = 'fail'
-                AND fecha >= NOW() - INTERVAL 10 MINUTE
-                AND DATE(fecha) = CURDATE();
-        ";
+        $sql = SqlComands::select(
+            $this->nameTable,
+            ['count(*)'],
+            ["ip=:ip", "usuario=:usuario", "resultado = 'fail'", "fecha >= NOW() - INTERVAL {$time} MINUTE", "DATE(fecha) = CURDATE()"]
+        );
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute(['ip' => $ip]);
+        return $stmt->execute(['ip' => $ip, 'usuario' => $usuario]);
     }
 
 }
