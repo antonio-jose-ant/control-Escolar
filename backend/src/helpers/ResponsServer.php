@@ -1,32 +1,34 @@
 <?php
-namespace App\core;
+namespace App\helpers;
 
 class ResponsServer
 {
     /**
      * Respuesta exitosa
      */
-    public function success($data = null, int $codeInternal = 1, int $code = 200)
+    public function success($data = null, int $codeInternal = 1, int $code = 200, array $info = [])
     {
         $this->sendJson([
             'status' => 'success',
             'ok' => true,
             'code' => $codeInternal,
-            'data' => $data
+            'data' => $data,
+            'info' => $info
         ], $code);
     }
 
     /**
      * Respuesta de error controlado
      */
-    public function error(string $message, int $codeInternal = -1, int $code = 400)
+    public function error(string $message, int $codeInternal = -1, int $code = 400, array $info = [])
     {
         $this->sendJson([
             'status' => 'error',
             'ok' => false,
             'code' => $codeInternal,
             'message' => $message,
-            'httpError' => $code
+            'httpError' => $code,
+            'info' => $info
         ], $code);
     }
 

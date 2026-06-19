@@ -4,32 +4,23 @@ namespace App\services\login;
  * Summary of SessionRepository
  *  crea el registro de un iniiicio de secion 
  */
-class SessionRepository
+class SessionRepository extends \App\mapping\SESSIONS
 {
     public function __construct(private \PDO $pdo)
     {
+        parent::__construct($pdo);
     }
     public function create(int $id, string $tokenHash, string $ip, string $ua, string $expires): bool
     {
-        $sql = "INSERT INTO sessions (user_id, token_hash, ip, user_agent, expires_at)
-                VALUES (:id, :t, :ip, :ua, :ex)";
-
-        return $this->pdo->prepare($sql)->execute([
-            'id' => $id,
-            't' => $tokenHash,
-            'ip' => $ip,
-            'ua' => $ua,
-            'ex' => $expires
-        ]);
+        return $this->Agregar($id, $tokenHash, $ip, $ua, $expires);
     }
+
     public function verifyToken(string $tokenHash, int $uId): bool
     {
-        $sql = "SELECT token_hash FROM sessions WHERE user_id = :id LIMIT 1";
+        $sql = self::SELECT($this->nameTable, ['token_hash'], ["user_id = :id"], limit: 1);
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $uId]);
-
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
         if (!$row)
             return false;
 
