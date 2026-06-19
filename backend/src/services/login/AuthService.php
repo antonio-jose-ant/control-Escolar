@@ -3,7 +3,6 @@ namespace App\Services\login;
 use App\Services\login\UserRepository;
 use App\Services\login\LoginAttemptRepository;
 use App\Services\login\SessionRepository;
-use App\Services\login\SessionRepositoryLogout;
 use App\services\ip\IpResolver;
 use App\Services\login\TokenService;
 use App\helpers\ResponsServer;
@@ -18,7 +17,6 @@ class AuthService
     private $ipFactory;
     private $tokens;
     private $ipResolve;
-    private $justLogaut;
 
     public function __construct(private \PDO $conexion)
     {
@@ -29,7 +27,6 @@ class AuthService
         $this->tokens = new TokenService();
         $this->ipResolve = new IpResolver();
         $this->rs = new ResponsServer();
-        $this->justLogaut = new SessionRepositoryLogout($conexion);
         $this->ipFactory = new IpFactory();
     }
     public function auth(string $user, string $pass, string $ua)
@@ -70,7 +67,7 @@ class AuthService
         session_start();
         $hash = $this->tokens->searchTokenBD($token);
         try {
-            $this->justLogaut->Delete($hash);
+            $this->sessions->Eliminar($hash);
         } catch (\Exception $e) {
             throw $e;
         }

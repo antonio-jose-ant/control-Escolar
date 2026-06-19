@@ -1,8 +1,8 @@
 <?php
 namespace App\mapping;
-use App\mapping\SqlComands;
 use App\Config\Debuger;
-class sessions extends SqlComands
+use App\mapping\SqlComands;
+class SESSIONS extends SqlComands
 {
     public $nameTable = 'sessions';
     public $As = 'tempBlock';
@@ -15,6 +15,7 @@ class sessions extends SqlComands
     public function Agregar(int $id, string $tokenHash, string $ip, string $ua, string $expires)
     {
         $sql = self::INSERT($this->nameTable, ['user_id', 'token_hash', 'ip', 'user_agent', 'expires_at']);
+        $this->info->setInfo('sessions:Agregar',$sql);
         return $this->pdo->prepare($sql)->execute([
             'user_id' => $id,
             'token_hash' => $tokenHash,
