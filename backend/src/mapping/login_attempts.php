@@ -13,34 +13,18 @@ class login_attempts extends SqlComands
         $this->info = new Debuger();
     }
 
-    /**
-     * Summary of getColumns
-     * @param array $columns
-     * @return string
-     */
-    public function getColumns(bool $allColumns, array $columns)
+    public function Agregar(string $usuario, string $ip, string $ua, string $res, string $razon)
     {
-        if ($allColumns) {
-            return "*";
-        }
-        $cols = [
-            'id' => false,
-            'usuario' => false,
-            'ip' => false,
-            'user_agent' => false,
-            'fecha' => false,
-            'resultado' => false,
-            'razon_fallo' => false
-        ];
-        $cols = array_merge($cols, $columns);
 
-        $sqlcols = [];
-        foreach ($cols as $key => $value) {
-            if ($value) {
-                $sqlcols[] = "{$this->As}.{$key}";
-            }
-        }
-        $sql = implode(',', $sqlcols);
-        return $sql;
+        $params = [
+            'usuario' => $usuario,
+            'ip' => $ip,
+            'user_agent' => $ua,
+            'resultado' => $res,
+            'razon_fallo' => $razon
+        ];
+        $sql = self::INSERT($this->nameTable, ['usuario', 'ip', 'user_agent', 'resultado', 'razon_fallo']);
+        // $this->Debuger->setInfoDebug('insert:SQL', $sql);
+        return $this->pdo->prepare($sql)->execute($params);
     }
 }

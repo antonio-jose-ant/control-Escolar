@@ -2,27 +2,12 @@
 namespace App\services\login;
 use App\mapping\login_attempts;
 use App\mapping\SqlComands;
-use App\Config\Debuger;
 class LoginAttemptRepository extends login_attempts
 {
     private $Debuger;
     public function __construct(private \PDO $pdo, $debuger = null)
     {
         // $this->Debuger = $debuger;
-    }
-    public function registrarIntento(string $usuario, string $ip, string $ua, string $res, string $razon)
-    {
-
-        $params = [
-            'usuario' => $usuario,
-            'ip' => $ip,
-            'user_agent' => $ua,
-            'resultado' => $res,
-            'razon_fallo' => $razon
-        ];
-        $sql = SqlComands::insert($this->nameTable, ['usuario', 'ip', 'user_agent', 'resultado', 'razon_fallo']);
-        // $this->Debuger->setInfoDebug('insert:SQL', $sql);
-        return $this->pdo->prepare($sql)->execute($params);
     }
     public function IntentosFallidos(string $ip, string $usuario, int $time)
     {

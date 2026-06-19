@@ -44,24 +44,24 @@ class AuthService
         $logValidaUser = $this->users->findByEmail($user);
         $ip = $this->ipResolve->get_client_ip();
         if ($this->ipFactory->ipBloqued($user, $ip)) {
-            $this->logs->registrarIntento($user, $ip, $ua, 'blocked', 'ip bloqueada por intentos fallidos');
+            $this->logs->Agregar($user, $ip, $ua, 'blocked', 'ip bloqueada por intentos fallidos');
             $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s'), $this->ipFactory->getInfoDebug()]);
         }
         if ($this->ipFactory->blockFailedAttempts($user, $ip)) {
-            $this->logs->registrarIntento($user, $ip, $ua, 'temporarily_blocked', 'mas de 5 intentos fallidos en los ultimos 5 minutos');
+            $this->logs->Agregar($user, $ip, $ua, 'temporarily_blocked', 'mas de 5 intentos fallidos en los ultimos 5 minutos');
             $this->rs->error("intenta mas tarde", -11, 200, ['F-H-bloqueo' => date('Y-m-d H:i:s'), $this->ipFactory->getInfoDebug()]);
         }
         if (!$logValidaUser) {
-            $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
+            $this->logs->Agregar($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
             $this->rs->error("Usuario y/o contraseña incorrecto", -11, 200);
         }
         $hashBD = $logValidaUser['password_hash'];
         // 2. Validar contraseña
         if (!password_verify($pass, $hashBD)) {
-            $this->logs->registrarIntento($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
+            $this->logs->Agregar($user, $ip, $ua, 'fail', 'Credenciales incorrectas');
             $this->rs->error("Usuario y/o contraseña incorrecto", -11, 200);
         }
-        $this->logs->registrarIntento($user, $ip, $ua, 'success', '');
+        $this->logs->Agregar($user, $ip, $ua, 'success', '');
         $this->createSession($logValidaUser['id'], $ip, $ua);
         $this->rs->success(null, 1);
     }
