@@ -108,3 +108,18 @@ CREATE TABLE user_modules (
     FOREIGN KEY (module_id) REFERENCES modules (id) ON DELETE CASCADE,
     FOREIGN KEY (granted_by) REFERENCES users (id) ON DELETE SET NULL
 );
+
+create table user_modules_permissions_kardex (
+    id int AUTO_INCREMENT PRIMARY KEY,
+    id_user_modules int,
+    update_by INT,
+    action ENUM(
+        'create',
+        'activate',
+        'deactivate',
+        'update'
+    ) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_user_modules) REFERENCES user_modules (id),
+    FOREIGN KEY (update_by) REFERENCES users (id),
+)
