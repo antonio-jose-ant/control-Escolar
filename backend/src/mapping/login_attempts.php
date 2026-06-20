@@ -4,8 +4,8 @@ use App\Config\Debuger;
 use App\mapping\SqlComands;
 class login_attempts extends SqlComands
 {
-    public $nameTable = 'login_attempts';
-    public $As = 'intento';
+    protected $nameTable = 'login_attempts';
+    protected $As = 'intento';
     public $info;
 
     public function __construct(private \PDO $pdo)

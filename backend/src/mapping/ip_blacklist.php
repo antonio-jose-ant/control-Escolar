@@ -4,8 +4,8 @@ use App\Config\Debuger;
 use App\mapping\SqlComands;
 class ip_blacklist extends SqlComands
 {
-    public $nameTable = 'ip_blacklist';
-    public $As = 'blacklist';
+    protected $nameTable = 'ip_blacklist';
+    protected $As = 'blacklist';
     public $info;
 
     public function __construct(private \PDO $pdo)
