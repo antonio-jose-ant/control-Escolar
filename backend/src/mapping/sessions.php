@@ -4,8 +4,8 @@ use App\Config\Debuger;
 use App\mapping\SqlComands;
 class SESSIONS extends SqlComands
 {
-    public $nameTable = 'sessions';
-    public $As = 'tempBlock';
+    protected $nameTable = 'sessions';
+    protected $As = 'tempBlock';
     public $info;
 
     public function __construct(private \PDO $pdo)

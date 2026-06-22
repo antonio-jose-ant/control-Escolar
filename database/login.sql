@@ -40,7 +40,7 @@ CREATE TABLE IP_INFOCLIENT (
     city VARCHAR(255) NULL,
     latitude DECIMAL(10, 6) NULL,
     longitude DECIMAL(10, 6) NULL,
-    INDEX idx_ip (ip)
+    INDEX (ip)
 )
 
 CREATE TABLE IP_BLOCKED (

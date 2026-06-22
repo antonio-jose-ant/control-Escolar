@@ -4,8 +4,8 @@ use App\mapping\SqlComands;
 use App\Config\Debuger;
 class IP_TEMPORARILY_BLOCKED extends SqlComands
 {
-    public $nameTable = 'IP_TEMPORARILY_BLOCKED';
-    public $As = 'tempBlock';
+    protected $nameTable = 'IP_TEMPORARILY_BLOCKED';
+    protected $As = 'tempBlock';
     public $info;
 
     public function __construct(private \PDO $pdo)
