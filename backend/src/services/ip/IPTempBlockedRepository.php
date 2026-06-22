@@ -4,10 +4,13 @@ use App\mapping\SqlComands;
 use App\Config\Debuger;
 class IPTempBlockedRepository extends \App\mapping\IP_TEMPORARILY_BLOCKED
 {
+    public $info;
+
     public function __construct(private \PDO $pdo)
     {
+        $this->info = new Debuger();
+        parent::__construct($pdo);
     }
-    
     public function existeIp(string $ip, string $usuario)
     {
         $sql = SqlComands::select($this->nameTable, ['IF(COUNT(*) > 0, TRUE, FALSE) AS exist'], ["ip=:ip", "user=:usuario", "fecha_fin >= NOW()"]);

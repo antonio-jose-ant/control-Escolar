@@ -55,10 +55,8 @@ class SqlComands
         return $sql;
     }
 
-    public static function DELETE(
-        string $table,
-        array $where
-    ): string {
+    public static function DELETE(string $table, array $where): string
+    {
 
         $sql = "DELETE FROM {$table}";
 
@@ -88,5 +86,8 @@ class SqlComands
     {
         return "TRUNCATE TABLE {$table}";
     }
+    public static function SearchData()
+    {
 
+    }
 }

@@ -1,6 +1,5 @@
 <?php
 namespace App\services\ip;
-use App\mapping\SqlComands;
 class IPBlackListRepository extends \App\mapping\ip_blacklist
 {
 
@@ -10,7 +9,7 @@ class IPBlackListRepository extends \App\mapping\ip_blacklist
     }
     public function existeIp(string $ip)
     {
-        $sql = SqlComands::select($this->nameTable, ['IF(COUNT(*) > 0, TRUE, FALSE) AS exist'], ["ip=:ip"]);
+        $sql = self::select($this->nameTable, ['IF(COUNT(*) > 0, TRUE, FALSE) AS exist'], ["ip=:ip"]);
         $this->info->setInfo('existeIp:SQL', $sql);
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['ip' => $ip]);
